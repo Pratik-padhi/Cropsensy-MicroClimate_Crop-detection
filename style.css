@@ -1,0 +1,169 @@
+/* RESET */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* 🌌 Animated Background */
+body {
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 16px;
+
+    background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #0072ff);
+    background-size: 400% 400%;
+    animation: gradientMove 12s ease infinite;
+    color: white;
+}
+
+/* Gradient animation */
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 🧊 Floating Glass Card */
+.container {
+    width: 100%;
+    max-width: 380px;
+    padding: 30px;
+    border-radius: 20px;
+
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(20px);
+
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 10px 40px rgba(0, 150, 255, 0.2);
+
+    animation: float 4s ease-in-out infinite;
+}
+
+/* Floating effect */
+@keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Field */
+.field {
+    margin-bottom: 18px;
+}
+
+/* Label + value row */
+.label-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 6px;
+    opacity: 0.8;
+}
+
+/* 🎛 SLIDER */
+input[type="range"] {
+    width: 100%;
+    appearance: none;
+    height: 6px;
+    border-radius: 5px;
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    outline: none;
+}
+
+/* Thumb */
+input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Button */
+button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: white;
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #00bfff;
+}
+
+/* 📊 Result Card */
+#result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+
+    background: rgba(255,255,255,0.08);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s ease;
+}
+
+/* Show animation */
+#result.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* States */
+.loading { color: #ffd54f; }
+.error { color: #ff5252; }
+.success { color: #69f0ae; }
+
+/* Map */
+#map {
+    height: 180px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+/* Weather box */
+#weatherBox {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    font-size: 13px;
+    text-align: center;
+}
+
+/* ===== Layout Enhancements ===== */
+
+.top-section {  
+    margin-bottom: 18px;  
+}  
+
+.inputs {  
+    margin-top: 10px;  
+}  
+
+.hint {  
+    margin-top: 15px;  
+    font-size: 12px;  
+    opacity: 0.6;  
+    text-align: center;  
+}
