@@ -112,7 +112,7 @@ function predict() {
     resultDiv.innerHTML = "⏳ Analyzing...";
     resultDiv.className = "loading show";
 
-    fetch("http://127.0.0.1:5000/predict", {
+    fetch("https://crop-prediction-api-pfh1.onrender.com/predict", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(data)
