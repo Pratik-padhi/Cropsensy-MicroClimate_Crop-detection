@@ -1,157 +1,174 @@
-# 🌾 Cropsensy — Microclimate-Based Crop Detection & Agricultural Decision Support System
+<div align="center">
 
-> An end-to-end ML pipeline that predicts the optimal crop to grow based on real-time microclimate and soil parameters — with integrated soil diagnosis and fertilizer recommendations.
+# 🌾 Cropsensy
+### Microclimate-Aware Crop Prediction & Agricultural Decision Support
 
----
+**Tell us your soil. We'll tell you what to grow.**
 
-## 📌 Overview
+[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-cropsensy.netlify.app-2ea44f?style=for-the-badge)](https://cropsensy.netlify.app)
+[![Made with Python](https://img.shields.io/badge/Python-3.x-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-ML-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
+[![Netlify](https://img.shields.io/badge/Deployed%20on-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://cropsensy.netlify.app)
 
-**Cropsensy** is a machine learning system designed to assist farmers and agronomists in making data-driven decisions about crop selection. By analyzing a combination of microclimate conditions and soil nutrient profiles, the system predicts the best-suited crop and provides actionable soil health and fertilizer recommendations.
-
-The project was developed and trained in Google Colab as a research-grade notebook (`Cropsensy.py`) and produces a deployable `.pkl` model artifact.
-
----
-
-## 🧠 Features
-
-- **Crop Prediction** — Classifies the optimal crop from 22 crop types based on environmental and soil inputs
-- **Stacking Ensemble Model** — Combines Random Forest, Decision Tree, and Logistic Regression with a Logistic Regression meta-learner
-- **Feature Engineering** — Generates 9 interaction features (NPK ratios, temperature-humidity composites, pH-nutrient products, etc.)
-- **Soil Diagnosis** — Rule-based engine that evaluates nutrient deficiencies and pH suitability
-- **Fertilizer Recommendation** — Suggests fertilizer type, quantity, and timing based on predicted crop and soil state
-- **Complete Decision Support Pipeline** — End-to-end function combining prediction, soil diagnostics, and fertilizer output
-- **Model Persistence** — Saves trained pipeline and metadata using `joblib` for deployment
+</div>
 
 ---
 
-## 🌱 Supported Crops
+## 🌐 Try It Live
 
-`rice` · `maize` · `chickpea` · `kidneybeans` · `pigeonpeas` · `mothbeans` · `mungbean` · `blackgram` · `lentil` · `pomegranate` · `banana` · `mango` · `grapes` · `watermelon` · `muskmelon` · `apple` · `orange` · `papaya` · `coconut` · `cotton` · `jute` · `coffee`
+> **No setup. No code. Just results.**
+
+👉 **[cropsensy.netlify.app](https://cropsensy.netlify.app)**
+
+Cropsensy is deployed as a fully interactive web application. Open it on any device, input your soil nutrient values using the sliders, and get an instant crop recommendation — powered by a trained ensemble ML model under the hood. It even **auto-detects your location and live weather data** so you don't have to manually enter temperature, humidity, or rainfall.
 
 ---
 
-## 📊 Input Features
+## 🧩 What Problem Does This Solve?
+
+Farmers and agronomists often rely on intuition or outdated almanacs when deciding what to plant. Wrong crop choices — even in otherwise good soil — can devastate an entire season.
+
+Cropsensy brings ML-driven precision to this decision. By combining **real-time microclimate data** (temperature, humidity, rainfall) with **soil nutrient profiles** (N, P, K, pH), it recommends the crop most likely to thrive in those exact conditions — not just generically, but for *your* field, *right now*.
+
+---
+
+## ✨ Features
 
 | Feature | Description |
 |---|---|
-| `N` | Nitrogen content in soil (mg/kg) |
-| `P` | Phosphorus content in soil (mg/kg) |
-| `K` | Potassium content in soil (mg/kg) |
-| `Temperature` | Ambient temperature (°C) |
-| `Humidity` | Relative humidity (%) |
-| `pH` | Soil pH value |
-| `Rainfall` | Annual rainfall (mm) |
-| + Extended | Latitude, Longitude, WindSpeed, SolarRadiation, SoilMoisture, etc. |
-
-**Engineered Features:** `Temp_Humidity`, `N_P_ratio`, `N_K_ratio`, `P_K_ratio`, `NPK_sum`, `pH_N`, `pH_P`, `pH_K`, `Temp_Rainfall`
+| 🌍 **Live Location Detection** | Auto-fetches your coordinates and real-time weather via browser geolocation |
+| 🎛️ **Interactive Sliders** | Manually adjust N, P, K, Temperature, Humidity, pH, and Rainfall |
+| 🌱 **Crop Prediction** | Classifies the best crop from 22 types with confidence score |
+| 🧪 **Soil Diagnosis** | Rule-based engine that flags nutrient deficiencies and pH imbalance |
+| 💊 **Fertilizer Recommendations** | Tells you what to apply, how much, and when — per predicted crop |
+| 📱 **Works Everywhere** | Responsive UI, accessible on mobile and desktop |
 
 ---
 
-## 🏗️ Model Architecture
+## 🌱 Crops Covered
+
+Cropsensy can recommend across **22 crop types**, spanning cereals, pulses, fruits, and cash crops:
+
+`Rice` · `Maize` · `Chickpea` · `Kidney Beans` · `Pigeon Peas` · `Moth Beans` · `Mung Bean` · `Black Gram` · `Lentil` · `Pomegranate` · `Banana` · `Mango` · `Grapes` · `Watermelon` · `Muskmelon` · `Apple` · `Orange` · `Papaya` · `Coconut` · `Cotton` · `Jute` · `Coffee`
+
+---
+
+## 🧠 How the Model Works
+
+The prediction engine is a **Stacking Ensemble Classifier** — a technique that layers multiple models so their combined judgment is more accurate than any single one.
 
 ```
-Input Features
-      │
-      ▼
-StandardScaler (Preprocessing)
-      │
-      ▼
-┌─────────────────────────────────┐
-│       Base Estimators           │
-│  ┌───────────────────────────┐  │
-│  │  Random Forest (100 trees)│  │
-│  │  Decision Tree            │  │
-│  │  Logistic Regression      │  │
-│  └───────────────────────────┘  │
-└────────────────┬────────────────┘
-                 │  (5-Fold CV meta-features)
-                 ▼
-       Meta Learner: Logistic Regression
-                 │
-                 ▼
-          Crop Prediction
+Your Input (N, P, K, Temp, Humidity, pH, Rainfall)
+         │
+         ▼
+   Feature Engineering
+   (9 interaction features: NPK ratios, pH-nutrient products, Temp × Rainfall, etc.)
+         │
+         ▼
+  StandardScaler (Normalization)
+         │
+         ▼
+┌────────────────────────────────────┐
+│          Base Learners             │
+│   Random Forest  (100 estimators)  │
+│   Decision Tree                    │
+│   Logistic Regression              │
+└──────────────┬─────────────────────┘
+               │  5-Fold CV meta-features
+               ▼
+     Meta Learner: Logistic Regression
+               │
+               ▼
+     🌾 Predicted Crop + Confidence
 ```
+
+### Why Stacking?
+A single model can be brittle. Random Forests are great with noisy data; Decision Trees catch hierarchical patterns; Logistic Regression provides a calibrated linear baseline. Stacking lets the meta-learner *learn* which base model to trust for which type of input — giving more robust predictions across diverse soil profiles.
 
 ---
 
 ## 📈 Model Performance
 
-| Metric | Value |
+| Metric | Result |
 |---|---|
-| Training Accuracy | **98.5%** |
-| Test Accuracy | **96.8%** |
-| CV Mean Accuracy | **96.5%** |
-| CV Std Dev | **±0.8%** |
-| Train-Test Split | 80 / 20 (stratified) |
-| Cross-Validation | 5-fold Stratified KFold |
+| 🎯 Training Accuracy | **98.5%** |
+| ✅ Test Accuracy | **96.8%** |
+| 🔁 CV Mean Accuracy | **96.5%** |
+| 📉 CV Std Dev | **± 0.8%** |
+| 📐 Train/Test Split | 80 / 20 (stratified) |
+| 🔄 Cross-Validation | 5-Fold Stratified KFold |
+
+Minimal overfitting gap between training and test accuracy confirms the model generalizes well to unseen field conditions.
 
 ---
 
-## 🗂️ Project Structure
+## 📊 Input Features
+
+### Raw Inputs
+| Feature | Unit | Description |
+|---|---|---|
+| `N` | mg/kg | Nitrogen content in soil |
+| `P` | mg/kg | Phosphorus content in soil |
+| `K` | mg/kg | Potassium content in soil |
+| `Temperature` | °C | Ambient temperature |
+| `Humidity` | % | Relative humidity |
+| `pH` | — | Soil pH value |
+| `Rainfall` | mm | Annual rainfall |
+
+### Engineered Features (auto-derived)
+`Temp_Humidity` · `N_P_ratio` · `N_K_ratio` · `P_K_ratio` · `NPK_sum` · `pH_N` · `pH_P` · `pH_K` · `Temp_Rainfall`
+
+---
+
+## 🗂️ Repository Structure
 
 ```
 Cropsensy/
-├── Cropsensy.py                            # Main training notebook (exported from Colab)
-├── microclimate_crop_prediction_model.pkl  # Trained pipeline (generated on run)
-├── model_metadata.pkl                      # Model metadata and version info
+├── Cropsensy.py                             # Full training pipeline (Colab notebook export)
+├── microclimate_crop_prediction_model.pkl   # Trained model pipeline (generated on run)
+├── model_metadata.pkl                       # Version info, accuracy, feature list
 └── README.md
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Run It Yourself
 
-### Prerequisites
+### 1. Install dependencies
 
 ```bash
 pip install pandas numpy scikit-learn matplotlib seaborn joblib
 ```
 
-### Running the Notebook
+### 2. Train the model
 
-1. Open `Cropsensy.py` in Google Colab or convert to `.ipynb`
-2. Mount your Google Drive and update the dataset path:
-   ```python
-   df = pd.read_csv('/content/drive/MyDrive/Micro Climate/Dataset/.../final_raw_microclimate_dataset.csv')
-   ```
-3. Run all cells sequentially — the model trains and saves automatically
+Open `Cropsensy.py` in Google Colab, mount your Drive, point to your dataset, and run all cells. The trained pipeline saves automatically as `model.pkl`.
 
-### Running Inference
+```python
+# Update dataset path in the notebook:
+df = pd.read_csv('/content/drive/MyDrive/.../final_raw_microclimate_dataset.csv')
+```
+
+### 3. Run inference
 
 ```python
 import joblib
 
 pipeline = joblib.load('microclimate_crop_prediction_model.pkl')
 
-# Sample prediction
-test_input = {
+result = complete_agricultural_recommendation_fixed({
     'N': 45, 'P': 35, 'K': 30,
     'temperature': 25.5, 'humidity': 65.0,
     'ph': 6.2, 'rainfall': 150.0,
-    'Latitude': 20, 'Longitude': 86,
-    'WindSpeed': 10, 'SolarRadiation': 200,
-    'SoilMoisture': 30, ...
-}
+    # ... extended microclimate features
+})
 
-result = complete_agricultural_recommendation_fixed(test_input)
-print(f"Recommended Crop: {result['prediction'].upper()}")
-print(f"Confidence: {result['confidence']:.2f}%")
+print(f"Recommended Crop : {result['prediction'].upper()}")
+print(f"Confidence       : {result['confidence']:.2f}%")
+print(f"Soil Status      : {result['soil_diagnosis']['status']}")
 ```
 
----
-
-## 🔬 Pipeline Stages
-
-1. **Data Loading** — CSV ingestion with fallback sample dataset generation
-2. **EDA** — Crop distribution plots, feature histograms, correlation heatmap
-3. **Preprocessing** — Duplicate removal, median imputation for missing values
-4. **Feature Engineering** — 9 interaction features derived from core inputs
-5. **Model Training** — Stacking Ensemble with 5-fold CV
-6. **Evaluation** — Accuracy, Precision, Recall, F1, Confusion Matrix
-7. **Feature Importance** — Extracted from the Random Forest base estimator
-8. **Soil Diagnosis** — Rule-based nutrient and pH assessment
-9. **Fertilizer Recommendation** — Crop-specific nutrient gap analysis
-10. **Model Persistence** — `joblib` export of pipeline and metadata
+Or just skip all of this and use **[cropsensy.netlify.app](https://cropsensy.netlify.app)** directly. 🌐
 
 ---
 
@@ -159,25 +176,29 @@ print(f"Confidence: {result['confidence']:.2f}%")
 
 | Layer | Tools |
 |---|---|
-| Language | Python 3.x |
-| ML Framework | scikit-learn |
-| Data | pandas, NumPy |
-| Visualization | matplotlib, seaborn |
-| Model Persistence | joblib |
-| Environment | Google Colab |
+| ML & Data | Python · scikit-learn · pandas · NumPy |
+| Visualization | matplotlib · seaborn |
+| Model Export | joblib |
+| Training Environment | Google Colab |
+| Deployment | Netlify |
 
 ---
 
 ## 👤 Author
 
-**Pratik Padhi**  
-B.Tech Student · Centurion University of Technology and Management, Bhubaneswar  
-Applied AI & ML Engineer
+**Pratik Padhi**
+B.Tech · Data Science & AI · Centurion University of Technology and Management, Bhubaneswar
+Research Publication: ICCAIML 2026
 
-[![GitHub](https://img.shields.io/badge/GitHub-Pratik--padhi-181717?logo=github)](https://github.com/Pratik-padhi)
+[![GitHub](https://img.shields.io/badge/GitHub-Pratik--padhi-181717?style=flat-square&logo=github)](https://github.com/Pratik-padhi)
+[![Live App](https://img.shields.io/badge/Live%20App-cropsensy.netlify.app-2ea44f?style=flat-square)](https://cropsensy.netlify.app)
 
 ---
 
-## 📄 License
+<div align="center">
 
-This project is open for academic and research use. Contact the author for commercial licensing.
+*Built with the belief that better data leads to better harvests.*
+
+**[🌾 Open Cropsensy](https://cropsensy.netlify.app)**
+
+</div>
